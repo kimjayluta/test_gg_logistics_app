@@ -21,20 +21,5 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <!-- Jquery Cdn-->
     <script src="js/jquery-3.3.1.min.js"></script>
-    <style>
-        .dropdown-menu{
-            left: -3rem;
-            top: 26px;
-        }
-        .dropdown:hover>.dropdown-menu{
-            display: block;
-        }
-        .txtColor{
-            color: whitesmoke;
-        }
-        .txt:hover{
-            color: #f5f5f58c;
-        }
-    </style>
 </head>
 <body style="font-family: 'Montserrat', sans-serif;">

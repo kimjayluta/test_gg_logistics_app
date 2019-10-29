@@ -1,4 +1,4 @@
-<?php include "./header.php"; ?>
+<?php include "./includes/header.php"; ?>
 
 <title>Login</title>
 <style>
@@ -42,37 +42,41 @@
                </div>
            </div>
            <div class="card-body">
-               <form id="loginForm">
-                   <div id="error"></div>
+
+               <form id="loginForm" onsubmit="return false;">
+
                    <div class="form-group row" style="margin-top: 13px;">
                        <label for="username" class="col-sm-1 col-form-label" style="text-align: right;padding: 0;">
                            <i class="fas fa-user"></i>
                        </label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control input" id="username" placeholder="Username">
+                           <input type="text" class="form-control input" id="username" placeholder="Username* " autocomplete="off">
+                           <small class="text-muted" id="usn_error"></small>
                        </div>
                    </div>
+
                    <div class="form-group row">
                        <label for="password" class="col-sm-1 col-form-label"style="text-align: right;padding: 0;">
                            <i class="fas fa-unlock"></i>
                        </label>
                        <div class="col-sm-10">
-                           <input type="password" class="form-control input" id="password" placeholder="Password">
+                           <input type="password" class="form-control input" id="password" placeholder="Password* " autocomplete="off">
+                           <small class="text-muted" id="pass_error"></small>
                        </div>
                    </div>
-                   <button type="submit" class="btn buton w-100" id="btn-submit">Sign in</button>
+
+                   <button type="submit" class="btn buton w-100" id="btn-submit">Login</button>
                     <div class="form-group mt-1 row" style="margin-bottom: 0">
-                        <div class="col-sm-8">
-                            <small><a href="signup.php">Don't have account yet? Create here! </a></small>
-                        </div>
                         <div class="col" style="text-align: right">
                             <small><a href="#"> Forgot Password ? </a></small>
                         </div>
                     </div>
                </form>
+
            </div>
        </div>
     </div>
 </section>
+<script src="./js/main.js"></script>
 
-<?php include "./footer.php"?>
+<?php include "./includes/footer.php"?>
