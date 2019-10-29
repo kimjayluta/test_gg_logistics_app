@@ -1,4 +1,4 @@
-<?php include "./includes/header.php"; ?>
+<?php include "./includes/global/header.php"; ?>
 
 <title>Login</title>
 <style>
@@ -50,7 +50,7 @@
                            <i class="fas fa-user"></i>
                        </label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control input" id="username" placeholder="Username* " autocomplete="off">
+                           <input type="text" class="form-control input" name="username" id="username" placeholder="Username* " autocomplete="off">
                            <small class="text-muted" id="usn_error"></small>
                        </div>
                    </div>
@@ -60,7 +60,7 @@
                            <i class="fas fa-unlock"></i>
                        </label>
                        <div class="col-sm-10">
-                           <input type="password" class="form-control input" id="password" placeholder="Password* " autocomplete="off">
+                           <input type="password" class="form-control input" name="password" id="password" placeholder="Password* " autocomplete="off">
                            <small class="text-muted" id="pass_error"></small>
                        </div>
                    </div>
@@ -79,4 +79,4 @@
 </section>
 <script src="./js/main.js"></script>
 
-<?php include "./includes/footer.php"?>
+<?php include "./includes/global/footer.php"?>
