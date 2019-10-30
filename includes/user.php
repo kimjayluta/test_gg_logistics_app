@@ -14,7 +14,7 @@ class User {
 
     //  Login Function
     public function userLogin($usn, $password){
-        $pre_stmt = $this->_CON->prepare("SELECT * FROM `user_grp` WHERE `usn` = ?");
+        $pre_stmt = $this->_CON->prepare("SELECT * FROM `users` WHERE `usn` = ?");
         $pre_stmt->bind_param("s",$usn);
         $pre_stmt->execute() or die($this->_CON->error);
         $result = $pre_stmt->get_result();

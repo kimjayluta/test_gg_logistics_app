@@ -49,7 +49,7 @@ $(document).ready(function (){
 
                 } else {
 
-                    window.location.href = encodeURI("../dashboard.php");
+                    window.location.href = encodeURI("./inventory.php");
                 }
             }
         })

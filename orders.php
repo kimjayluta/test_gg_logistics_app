@@ -1,5 +1,14 @@
 <?php
 include "./includes/global/header.php";
+include "./database/constants.php";
+include "./database/db.php";
+
+$userLoggedIn = $_SESSION['userId'];
+$userType = $_SESSION["user_type"];
+
+$_CON = new Database();
+$_CON = $_CON->connect();
+
 ?>
 <title>Dashboard</title>
 <div class="wrapper">
@@ -30,23 +39,47 @@ include "./includes/global/header.php";
 
         <!--Content here-->
         <div class="container">
+            <div class="card cd">
+                <div class="card-body">
+                    <form>
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Clients: </label>
+                            <div class="col-sm-10">
+                                <select class="selectpicker" multiple data-live-search="true">
+                                    <?php
+                                        $sql = "SELECT `id`,`name` FROM `clients` WHERE `user_id` = ?";
+                                        $pre_stmt = $_CON->prepare($sql);
+                                        $pre_stmt->bind_param("i",$userLoggedIn);
+                                        $pre_stmt->execute() or die ($_CON->error());
+                                        $result = $pre_stmt->get_result();
 
-            <div class="row">
-                <div class="col-2">
-                    <div class="dropdown mb-4 w-100">
-                        <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="">Filter by</span>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Choose a Client...</a>
-                            <a class="dropdown-item" href="#">Delivery Time...</a>
+                                        while ($row = $result->fetch_array()){
+                                            echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                        <div class="form-group row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Date From: </label>
+                            <div class="col-sm-4">
+                                <input type="date" name="date-from" id="date-from" class="form-control">
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">To: </label>
+                                    <div class="col-sm-10">
+                                        <input type="date" name="date-from" id="date-from" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary multi_select">Submit</button>
+                    </form>
                 </div>
-                <div class="col"></div>
             </div>
 
-            <div class="card">
+            <div class="card cd">
                 <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
                     <div class="row" style="float:right">
                         <a href="#">
@@ -88,7 +121,7 @@ include "./includes/global/header.php";
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card cd">
                 <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
                     <div class="row" style="float:right">
                         <a href="#">

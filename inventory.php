@@ -1,5 +1,14 @@
 <?php
 include "./includes/global/header.php";
+include "./database/constants.php";
+include "./database/db.php";
+
+$userLoggedIn = $_SESSION['userId'];
+$userType = $_SESSION["user_type"];
+
+$_CON = new Database();
+$_CON = $_CON->connect();
+
 ?>
 
 <title>Dashboard</title>
@@ -8,6 +17,7 @@ include "./includes/global/header.php";
     <?php include "./includes/global/side_nav.php"?>
     <!-- Page Content  -->
     <div id="content">
+
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <button type="button" id="sidebarCollapse" class="btn btn-dark" style="border-radius: 20px;">
@@ -29,6 +39,7 @@ include "./includes/global/header.php";
             </div>
         </nav>
 
+
         <!--Content here-->
         <div class="container">
             <div class="card cd">
@@ -38,11 +49,19 @@ include "./includes/global/header.php";
                         <div class="col-6">
                             <div style="float:right;">
                                 <select class="selectpicker" multiple data-live-search="true">
-                                    <option>Mustard</option>
-                                    <option>Ketchup</option>
-                                    <option>Relish</option>
+                                    <?php
+                                        $sql = "SELECT `id`,`name` FROM `clients` WHERE `user_id` = ?";
+                                        $pre_stmt = $_CON->prepare($sql);
+                                        $pre_stmt->bind_param("i",$userLoggedIn);
+                                        $pre_stmt->execute() or die ($_CON->error());
+                                        $result = $pre_stmt->get_result();
+
+                                        while ($row = $result->fetch_array()){
+                                            echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                                        }
+                                    ?>
                                 </select>
-                                <button type="submit" class="btn btn-primary" id="multi_select">Submit</button>
+                                <button type="submit" class="btn btn-primary multi_select">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -51,11 +70,12 @@ include "./includes/global/header.php";
                     <table class="table" id="item_list">
                         <thead>
                         <tr class="">
-                            <th scope="col">Item Code: </th>
-                            <th scope="col">Description: </th>
+                            <th scope="col">Item Code</th>
+                            <th scope="col">Description</th>
                             <th scope="col">Available Stock</th>
                             <th scope="col">Reserved Stock</th>
                             <th scope="col">Overall Stock</th>
+                            <th scope="col">Order By</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -72,7 +92,7 @@ include "./includes/global/header.php";
 $(document).ready(function (){
     $('.selectpicker').selectpicker();
 
-    $("#multi_select").on("click", function (){
+    $(".multi_select").on("click", function (){
         console.log($(".selectpicker").val());
     })
 })
