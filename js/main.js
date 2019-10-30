@@ -17,6 +17,7 @@ $(document).ready(function (){
     $("#loginForm").on("submit", function() {
         let usn = $("#username");
         let pass = $("#password");
+        let userType = $("#user_type");
         let isEmptySpace = "^\\s+$";
 
         if (usn.val().trim() == "" || pass.val().trim() == ""){
@@ -38,7 +39,6 @@ $(document).ready(function (){
             method: "POST",
             data: $("#loginForm").serialize(),
             success: function (res){
-
                 if (res == "ERROR"){
 
                     $("#username").addClass("border-bottom border-danger");
@@ -48,7 +48,6 @@ $(document).ready(function (){
                     $("#pass_error").html("<span class='text-danger'> Error Username or Password! Please try again.</span>");
 
                 } else {
-
                     window.location.href = encodeURI("./inventory.php");
                 }
             }

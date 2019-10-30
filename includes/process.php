@@ -4,9 +4,9 @@ include_once("user.php");
 // include_once("DBOperation.php");
 
 // login user account handler
-if (isset($_POST["username"], $_POST["password"])){
+if (isset($_POST["username"], $_POST["password"], $_POST["user_type"])){
     $user = new User();
-    $result = $user->userLogin($_POST["username"], $_POST["password"]);
+    $result = $user->userLogin($_POST["username"], $_POST["password"], $_POST["user_type"]);
     echo $result;
     exit;
 }

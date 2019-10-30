@@ -41,7 +41,7 @@ $_CON = $_CON->connect();
         <div class="container">
             <div class="card cd">
                 <div class="card-body">
-                    <form>
+                    <form id="filter-form" onsubmit="return false;">
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Clients: </label>
                             <div class="col-sm-10">

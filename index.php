@@ -68,9 +68,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-
                     <form id="loginForm" onsubmit="return false;">
-
                         <div class="form-group row" style="margin-top: 13px;">
                             <label for="username" class="col-sm-1 col-form-label" style="text-align: right;padding: 0;">
                                 <i class="fas fa-user"></i>
@@ -80,7 +78,6 @@
                                 <small class="text-muted" id="usn_error"></small>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="password" class="col-sm-1 col-form-label"style="text-align: right;padding: 0;">
                                 <i class="fas fa-unlock"></i>
@@ -90,15 +87,26 @@
                                 <small class="text-muted" id="pass_error"></small>
                             </div>
                         </div>
-
-                        <button type="submit" class="btn buton w-100" id="btn-submit">Login</button>
-                            <div class="form-group mt-1 row" style="margin-bottom: 0">
-                                <div class="col" style="text-align: right">
-                                    <small><a href="#"> Forgot Password ? </a></small>
-                                </div>
+                        <div class="form-group row">
+                            <label for="password" class="col-sm-1 col-form-label"style="text-align: right;padding: 0;">
+                                <i class="fas fa-user"></i>
+                            </label>
+                            <div class="col-sm-10">
+                                <select name="user_type" id="user_type" class="form-control ">
+                                    <option value="admin">Admin</option>
+                                    <option value="csr">Costumer Service</option>
+                                    <option value="costumer">Costumer</option>
+                                </select>
+                                <small class="text-muted" id="userType_error"></small>
                             </div>
+                        </div>
+                        <button type="submit" class="btn buton w-100" id="btn-submit">Login</button>
+                        <div class="form-group mt-1 row" style="margin-bottom: 0">
+                            <div class="col" style="text-align: right">
+                                <small><a href="#"> Forgot Password ? </a></small>
+                            </div>
+                        </div>
                     </form>
-
                 </div>
             </div>
         </div>

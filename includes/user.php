@@ -13,8 +13,16 @@ class User {
     }
 
     //  Login Function
-    public function userLogin($usn, $password){
-        $pre_stmt = $this->_CON->prepare("SELECT * FROM `users` WHERE `usn` = ?");
+    public function userLogin($usn, $password, $user_type){
+        $sql = "";
+
+        if ($user_type !== "costumer"){
+            $sql = "SELECT * FROM `users` WHERE `usn` = ?";
+        } else {
+            $sql = "SELECT * FROM `clients` WHERE `usn` = ?";
+        }
+
+        $pre_stmt = $this->_CON->prepare($sql);
         $pre_stmt->bind_param("s",$usn);
         $pre_stmt->execute() or die($this->_CON->error);
         $result = $pre_stmt->get_result();
@@ -26,9 +34,12 @@ class User {
             $row = $result->fetch_assoc();
             if ($password == $row["pass"]){
 
+                if ($user_type !== "costumer"){
+                    $_SESSION["user_type"] = $row["user_type"];
+                }
                 $_SESSION["userId"] = $row["id"];
                 $_SESSION["usn"] = $row["usn"];
-                $_SESSION["user_type"] = $row["user_type"];
+
                 return 1;
 
             } else {
