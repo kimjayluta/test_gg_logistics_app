@@ -36,6 +36,8 @@ class User {
 
                 if ($user_type !== "costumer"){
                     $_SESSION["user_type"] = $row["user_type"];
+                } else {
+                    $_SESSION["user_type"] = 'costumer';
                 }
                 $_SESSION["userId"] = $row["id"];
                 $_SESSION["usn"] = $row["usn"];
