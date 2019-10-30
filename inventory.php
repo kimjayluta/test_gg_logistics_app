@@ -1,6 +1,7 @@
 <?php
 include "./includes/global/header.php";
 ?>
+
 <title>Dashboard</title>
 <div class="wrapper">
     <!-- Sidebar  -->
@@ -32,15 +33,17 @@ include "./includes/global/header.php";
         <div class="container">
             <div class="card cd">
                 <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
-                    <div class="input-group">
-                        <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                            <option selected>Choose a Client...</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Submit</button>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-6">
+                            <div style="float:right;">
+                                <select class="selectpicker" multiple data-live-search="true">
+                                    <option>Mustard</option>
+                                    <option>Ketchup</option>
+                                    <option>Relish</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary" id="multi_select">Submit</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -64,4 +67,15 @@ include "./includes/global/header.php";
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function (){
+    $('.selectpicker').selectpicker();
+
+    $("#multi_select").on("click", function (){
+        console.log($(".selectpicker").val());
+    })
+})
+</script>
+
 <?php include "./includes/global/footer.php";?>
