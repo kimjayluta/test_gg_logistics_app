@@ -44,14 +44,21 @@ class User {
                     $_SESSION["userID"] = $row["user_id"];
                     $_SESSION["user_type"] = 'costumer';
                 }
-
-
                 return 1;
 
             } else {
                 return "ERROR";
             }
         }
+    }
+
+    public function logout(){
+        include_once("../database/constants.php");
+
+        if (isset($_SESSION["userID"])){
+            session_destroy();
+        }
+        header("location: ../");
     }
 }
 ?>

@@ -1,3 +1,18 @@
+<?php
+include_once("./database/constants.php");
+
+if (isset($_SESSION["user_type"])){
+
+    if ($_SESSION["user_type"] === "admin" || $_SESSION["user_type"] === "csr" ){
+
+        header("location: ./admin_csr/inventory.php");
+
+    } else if ($_SESSION["user_type"] === "costumer") {
+
+        header("location: ./costumer/inv_page.php");
+    }
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>

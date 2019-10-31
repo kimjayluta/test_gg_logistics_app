@@ -1,6 +1,6 @@
 <?php
 include_once("../database/constants.php");
-include_once("user.php");
+include_once("User.php");
 include_once("Costumer.php");
 include_once("Admin.php");
 
@@ -11,6 +11,13 @@ if (isset($_POST["username"], $_POST["password"], $_POST["user_type"])){
     echo $result;
     exit;
 }
+
+// Logout Function
+if (isset($_GET["logout"])){
+    $user = new User();
+    $user->logout();
+}
+
 /*************************************************************************************
   /$$$$$$                        /$$
  /$$__  $$                      | $$
@@ -21,6 +28,7 @@ if (isset($_POST["username"], $_POST["password"], $_POST["user_type"])){
 |  $$$$$$/|  $$$$$$/ /$$$$$$$/  |  $$$$/|  $$$$$$/| $$ | $$ | $$|  $$$$$$$| $$
  \______/  \______/ |_______/    \___/   \______/ |__/ |__/ |__/ \_______/|__/
 *************************************************************************************/
+
 // Costumers Get Item list
 if (isset($_POST["getItems"])){
     $costumer = new Costumer();

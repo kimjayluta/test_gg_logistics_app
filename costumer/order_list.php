@@ -2,9 +2,16 @@
 include "../includes/global/header.php";
 include "../database/constants.php";
 
+// Restriction not to be visit by admin/csr user.
+if (isset($_SESSION["user_type"])){
+    if ($_SESSION["user_type"] != 'costumer'){
+        header("location: ../");
+        exit;
+    }
+}
+
 $costumerID = $_SESSION['costumerID'];
 $userID = $_SESSION["userID"];
-$userType = $_SESSION["user_type"];
 
 // include "../database/db.php";
 // $_CON = new Database();
@@ -33,7 +40,7 @@ $userType = $_SESSION["user_type"];
                         <a href="#">History</a>
                     </li>
                     <li>
-                        <a href="#">Log out</a>
+                        <a href="../includes/process.php?logout">Log out</a>
                     </li>
                 </ul>
             </li>
