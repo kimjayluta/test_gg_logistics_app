@@ -63,10 +63,30 @@ if (isset($_POST["selectedUserIDs"])){
     echo $result;
     exit;
 }
-
+// Order Filter function
 if (isset($_POST["selectedUsers"], $_POST["dateFrom"], $_POST["dateTo"])){
     $order = new Admin();
     $result = $order->getUserOrder($_POST["selectedUsers"], $_POST["dateFrom"], $_POST["dateTo"]);
+    echo $result;
+    exit;
+}
+// Edit Client Info
+if (isset($_POST["clientID"], $_POST["name"], $_POST["address"], $_POST["zipCode"])){
+    $order = new Admin();
+    $result = $order->editClientInfo($_POST["clientID"], $_POST["name"], $_POST["address"], $_POST["zipCode"]);
+    echo $result;
+    exit;
+}
+// Get Client Info
+if (isset($_POST["clientID"], $_POST["getClientInfo"])){
+    $order = new Admin();
+    $result = $order->getClientInfo($_POST["clientID"]);
+    echo $result;
+    exit;
+}
+if (isset($_POST["dataID"], $_POST["deleteData"])){
+    $order = new Admin();
+    $result = $order->deleteOrder($_POST["dataID"]);
     echo $result;
     exit;
 }
