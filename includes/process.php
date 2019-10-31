@@ -2,7 +2,7 @@
 include_once("../database/constants.php");
 include_once("user.php");
 include_once("Costumer.php");
-include_once("Inventory.php");
+include_once("Admin.php");
 
 // login user account handler
 if (isset($_POST["username"], $_POST["password"], $_POST["user_type"])){
@@ -58,8 +58,15 @@ if (isset($_POST["item"], $_POST["qty"], $_POST["costumerID"], $_POST["userID"])
 
 // Inventory filter function
 if (isset($_POST["selectedUserIDs"])){
-    $inventory = new Inventory();
+    $inventory = new Admin();
     $result = $inventory->getUserItem($_POST["selectedUserIDs"]);
+    echo $result;
+    exit;
+}
+
+if (isset($_POST["selectedUsers"], $_POST["dateFrom"], $_POST["dateTo"])){
+    $order = new Admin();
+    $result = $order->getUserOrder($_POST["selectedUsers"], $_POST["dateFrom"], $_POST["dateTo"]);
     echo $result;
     exit;
 }
