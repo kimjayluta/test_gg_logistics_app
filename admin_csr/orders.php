@@ -150,7 +150,7 @@ $_CON = $_CON->connect();
                                                 <h6>Quantity: </h6>
                                             </div>
                                             <div class="col-md-10"  style="font-style: italic;">
-                                                <h6>0000'.$row["id"].'</h6>
+                                                <h6>'.$row["0"].'</h6>
                                                 <hr>
                                                 <h6>'.$row["name"].'</h6>
                                                 <hr>
@@ -312,7 +312,7 @@ $(document).ready(function (){
                 method: 'POST',
                 data: {dataID:dataID, deleteData:1},
                 success: function (res){
-                    if (res === 1){
+                    if (res == 1){
                         alert("Data is successfully Deleted!");
                         window.location.href = './orders.php';
                     } else {
