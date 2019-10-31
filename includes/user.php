@@ -30,7 +30,6 @@ class User {
         if ($result->num_rows < 1){
             return "ERROR";
         } else {
-
             $row = $result->fetch_assoc();
             if ($password == $row["pass"]){
 
@@ -38,8 +37,10 @@ class User {
                     $_SESSION["user_type"] = $row["user_type"];
                 } else {
                     $_SESSION["user_type"] = 'costumer';
+                    $_SESSION["userID"] = $row["user_id"];
                 }
-                $_SESSION["userId"] = $row["id"];
+
+                $_SESSION["costumerID"] = $row["id"];
                 $_SESSION["usn"] = $row["usn"];
 
                 return 1;

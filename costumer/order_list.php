@@ -1,13 +1,14 @@
 <?php
 include "../includes/global/header.php";
 include "../database/constants.php";
-include "../database/db.php";
 
-$userLoggedIn = $_SESSION['userId'];
+$costumerID = $_SESSION['costumerID'];
+$userID = $_SESSION["userID"];
 $userType = $_SESSION["user_type"];
 
-$_CON = new Database();
-$_CON = $_CON->connect();
+// include "../database/db.php";
+// $_CON = new Database();
+// $_CON = $_CON->connect();
 
 ?>
 <title>Dashboard</title>
@@ -52,7 +53,7 @@ $_CON = $_CON->connect();
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="#">
-                                Hi, <span> Admin</span>
+                                Hi, <span id="loggedUser" data-id="<?php echo $costumerID;?>" data-user="<?php echo $userID;?>"> Admin</span>
                                 <i class="fas fa-user-circle fa-lg"></i>
                             </a>
                         </li>
@@ -95,8 +96,8 @@ $_CON = $_CON->connect();
                             <h6>07/21/1998</h6>
                             <hr>
                             <ul class="order-list">
-                                <li class="list-item">Samsung</li>
-                                <li class="list-item">Samsung</li>
+                                <li class="">Samsung</li>
+                                <li class="">Samsung</li>
                             </ul>
                         </div>
                     </div>
@@ -118,57 +119,40 @@ $_CON = $_CON->connect();
         </button>
       </div>
       <div class="modal-body">
-            <table class="table">
-                <thead class="thead-primary">
-                    <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="table-body">
-                    <tr>
-                        <td>
-                            <select class="form-control list-item">
-                                <option>Select an Item</option>
-                            </select>
-                        </td>
-                        <td style="width: 40%;">
-                            <input type="number" name="qty" class="form-control qty" required/>
-                        </td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div>
-                <button type='button' class='btn btn-success btn_add_column' id='add_row'>
-                    <i class='fas fa-plus fa-sm'></i>
-                </button>
-            </div>
+        <small id="qty-error"></small>
+        <table class="table">
+            <thead class="thead-primary">
+                <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Available Stock</th>
+                </tr>
+            </thead>
+            <tbody class="table-body">
+                <tr>
+                    <td class="item">
+                        <select class="form-control list-item" id="selected-item"></select>
+                    </td>
+                    <td style="width: 30%;">
+                        <input type="number" name="qty" class="form-control" id="qty" required disabled/>
+                    </td>
+                    <td style="width: 20%;">
+                        <input type="text" name="available-stock" id="available-stock" class="form-control qty" value="" disabled/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" id="save-order">Order</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-
-function addColumn(elem){
-    let j_id = 1;
-    let html_code = "";
-
-    j_id = j_id + 1;
-    html_code = "<tr id='"+ j_id +"'>";
-    html_code += "<td><select class='form-control list-item'><option>Select an Item</option></select></td>";
-    html_code += "<td style='width: 40%;'><input type='number' name='qty' class='form-control qty' required/></td>";
-    html_code += "<td class='action_btn'><button type='button' class='btn btn-danger remove-row' data-id='"+ j_id +"'> <i class='fas fa-minus'></i></button></td>";
-    html_code += "</tr>";
-    return $(elem).append(html_code);
-}
-
+// Get all list of item
 function fetchItemList(){
     $.ajax({
         url: '../includes/process.php',
@@ -176,28 +160,71 @@ function fetchItemList(){
         data: {getItems:1},
         success: function (res){
             if (res != "ERROR"){
-                let root = "<option value='0'>Select an Item</option>"
+                let root = "<option value='0' selected>Select an Item</option>"
                 $('.list-item').html(root + res);
             }
         }
     })
 }
+// Gets the number of available stock
+function getAvailableStock(itemID){
+    $.ajax({
+        url: '../includes/process.php',
+        method: 'post',
+        data: {itemID},
+        success: function (res){
+            $("#available-stock").val(res);
+        }
+    })
+}
 
 $(document).ready(function (){
-
+    // Function to get the Item list
     fetchItemList();
-
-    $("#add_row").on("click", function(){
-        addColumn(".table-body");
-        fetchItemList();
+    // Get and computes the Available stock of an item and removed the disabled attr in QTY
+    $(".list-item").on("change", function(){
+        const itemID = $(this).val();
+        $("#qty").removeAttr("disabled");
+        getAvailableStock(itemID);
     });
 
-    $(".table").on("click", ".remove-row", function (){
-        const rowID = $(this).data('id');
-        $('#'+ rowID).remove();
+    // Function show a error when quantity is greater than the available stock
+    $("#qty").on("keyup", function(){
+        const qtyValue = $(this).val();
+        const availableStock = $("#available-stock").val();
+        if (qtyValue > availableStock){
+            $(this).addClass("border-danger");
+            $("#qty-error").html("<span class='text-danger'>There's no available stock!</span>");
+        } else {
+            $(this).removeClass("border-danger");
+            $("#qty-error").html("");
+        }
     });
+    // Submit the order
+    $("#save-order").on("click", function(){
+        const stock = $("#available-stock").val();
+        const data = {
+                    item: $("#selected-item").val(),
+                    qty: $("#qty").val(),
+                    costumerID: $("#loggedUser").attr("data-id"),
+                    userID: $("#loggedUser").attr("data-user")
+                }
 
+        if (data.qty > stock){
+            return false;
+        }
 
+        $.ajax({
+            url: '../includes/process.php',
+            method: 'POST',
+            data: data,
+            success: function (res){
+                if (res == 1){
+                    window.location.href = "./order_list.php";
+                }
+            }
+        })
+    })
 
 })
 </script>

@@ -21,4 +21,18 @@ if (isset($_POST["getItems"])){
     exit;
 }
 
+// Get the available stock
+if (isset($_POST["itemID"])){
+    $costumer = new Costumer();
+    $result = $costumer->getAvailableStock($_POST["itemID"]);
+    echo $result;
+    exit;
+}
+// Create a new Order
+if (isset($_POST["item"], $_POST["qty"], $_POST["costumerID"], $_POST["userID"])){
+    $costumer = new Costumer();
+    $result = $costumer->createOrder($_POST["item"], $_POST["costumerID"], $_POST["userID"], $_POST["qty"]);
+    echo $result;
+    exit;
+}
 ?>
