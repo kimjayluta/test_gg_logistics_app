@@ -137,7 +137,7 @@ $userType = $_SESSION["user_type"];
                         <input type="number" name="qty" class="form-control" id="qty" required disabled/>
                     </td>
                     <td style="width: 20%;">
-                        <input type="text" name="available-stock" id="available-stock" class="form-control qty" value="" disabled/>
+                        <input type="number" name="available-stock" id="available-stock" class="form-control qty" disabled/>
                     </td>
                 </tr>
             </tbody>
@@ -188,18 +188,6 @@ $(document).ready(function (){
         getAvailableStock(itemID);
     });
 
-    // Function show a error when quantity is greater than the available stock
-    $("#qty").on("keyup", function(){
-        const qtyValue = $(this).val();
-        const availableStock = $("#available-stock").val();
-        if (qtyValue > availableStock){
-            $(this).addClass("border-danger");
-            $("#qty-error").html("<span class='text-danger'>There's no available stock!</span>");
-        } else {
-            $(this).removeClass("border-danger");
-            $("#qty-error").html("");
-        }
-    });
     // Submit the order
     $("#save-order").on("click", function(e){
         e.preventDefault();
@@ -212,6 +200,7 @@ $(document).ready(function (){
                 }
 
         if (data.qty > stock){
+            alert("No available stock for that quantity!");
             return false;
         }
 
