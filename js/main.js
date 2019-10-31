@@ -47,8 +47,13 @@ $(document).ready(function (){
                     $("#password").addClass("border-bottom border-danger");
                     $("#pass_error").html("<span class='text-danger'> Error Username or Password! Please try again.</span>");
 
+                    return false;
+                }
+
+                if (userType.val() === "costumer"){
+                    window.location.href = encodeURI("./costumer/inv_page.php");
                 } else {
-                    window.location.href = encodeURI("./inventory.php");
+                    window.location.href = encodeURI("./admin_csr/inventory.php");
                 }
             }
         })

@@ -201,7 +201,8 @@ $(document).ready(function (){
         }
     });
     // Submit the order
-    $("#save-order").on("click", function(){
+    $("#save-order").on("click", function(e){
+        e.preventDefault();
         const stock = $("#available-stock").val();
         const data = {
                     item: $("#selected-item").val(),
@@ -224,7 +225,7 @@ $(document).ready(function (){
                 }
             }
         })
-    })
+    });
 
 })
 </script>
