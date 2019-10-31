@@ -34,14 +34,17 @@ class User {
             if ($password == $row["pass"]){
 
                 if ($user_type !== "costumer"){
+                    $_SESSION["userID"] = $row["id"];
+                    $_SESSION["usn"] = $row["usn"];
                     $_SESSION["user_type"] = $row["user_type"];
+
                 } else {
-                    $_SESSION["user_type"] = 'costumer';
+                    $_SESSION["costumerID"] = $row["id"];
+                    $_SESSION["usn"] = $row["usn"];
                     $_SESSION["userID"] = $row["user_id"];
+                    $_SESSION["user_type"] = 'costumer';
                 }
 
-                $_SESSION["costumerID"] = $row["id"];
-                $_SESSION["usn"] = $row["usn"];
 
                 return 1;
 

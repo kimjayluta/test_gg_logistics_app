@@ -95,14 +95,14 @@ $_CON = $_CON->connect();
                         <thead>
                         <tr class="">
                             <th scope="col">Item Code</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">Product</th>
                             <th scope="col">Available Stock</th>
                             <th scope="col">Reserved Stock</th>
                             <th scope="col">Overall Stock</th>
                             <th scope="col">Order By</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="table-data">
 
                         </tbody>
                     </table>
@@ -117,8 +117,17 @@ $(document).ready(function (){
     $('.selectpicker').selectpicker();
 
     $(".multi_select").on("click", function (){
-        console.log($(".selectpicker").val());
-    })
+        const selectedUserIDs = $(".selectpicker").val();
+
+        $.ajax({
+            url: '../includes/process.php',
+            method: 'POST',
+            data: {selectedUserIDs:selectedUserIDs},
+            success: function (res){
+                $("#table-data").html(res);
+            }
+        })
+    });
 })
 </script>
 
