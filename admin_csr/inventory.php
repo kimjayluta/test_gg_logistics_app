@@ -124,7 +124,11 @@ $(document).ready(function (){
             method: 'POST',
             data: {selectedUserIDs:selectedUserIDs},
             success: function (res){
-                $("#table-data").html(res);
+                if (res != "NO_DATA_AVAILABLE"){
+                    $("#table-data").html(res);
+                } else {
+                    $("#data").html("<h2 class='text-center text-danger mt-4'>NO DATA AVAILABLE</h2>");
+                }
             }
         })
     });
