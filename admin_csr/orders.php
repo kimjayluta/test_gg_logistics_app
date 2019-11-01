@@ -3,7 +3,6 @@ include "../includes/global/header.php";
 include "../database/constants.php";
 include "../database/db.php";
 
-
 // Restriction not to be visit by costumer user.
 if (isset($_SESSION["user_type"])){
     if ($_SESSION["user_type"] == 'costumer'){

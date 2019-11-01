@@ -36,9 +36,6 @@ $_CON = $_CON->connect();
                 <a href="#settings" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Settings</a>
                 <ul class="collapse list-unstyled" id="settings">
                     <li>
-                        <a href="#">History</a>
-                    </li>
-                    <li>
                         <a href="../includes/process.php?logout">Log out</a>
                     </li>
                 </ul>

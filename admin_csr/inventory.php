@@ -79,7 +79,7 @@ $_CON = $_CON->connect();
                                 <select class="selectpicker" multiple data-live-search="true">
                                     <?php
                                         $sql = "";
-                                        if ($userType == "admin"){
+                                        if ($_SESSION["user_type"] == "admin"){
                                             $sql = "SELECT `id`,`name` FROM `clients` WHERE `user_id` = $userLoggedIn";
                                         } else {
                                             $sql = "SELECT `id`,`name` FROM `clients`";

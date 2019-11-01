@@ -23,7 +23,7 @@ function getAvailableStock(itemID){
         }
     })
 }
-
+// Function to Get all record order with pagination
 function load_data(page){
     const clientID = $("#loggedUser").data("id");
     $.ajax({

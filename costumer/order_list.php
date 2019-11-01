@@ -37,9 +37,6 @@ $_CON = $_CON->connect();
                 <a href="#settings" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Settings</a>
                 <ul class="collapse list-unstyled" id="settings">
                     <li>
-                        <a href="#">History</a>
-                    </li>
-                    <li>
                         <a href="../includes/process.php?logout">Log out</a>
                     </li>
                 </ul>
@@ -80,63 +77,7 @@ $_CON = $_CON->connect();
                     </div>
                 </div>
             </div>
-            <div id="data">
-                <?php
-                    // $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
-                    // WHERE b.id = a.item_id AND c.id = a.client_id
-                    // AND a.client_id = ? ORDER BY a.delivery_date DESC";
-
-                    // $pre_stmt = $_CON->prepare($sql);
-                    // $pre_stmt->bind_param("i", $costumerID);
-                    // $pre_stmt->execute() or die($_CON->error);
-                    // $result = $pre_stmt->get_result();
-
-                    // if ($result->num_rows > 0){
-                    //     while($row = $result->fetch_array()){
-                    //         echo
-                    //         '
-                    //             <div class="card cd">
-                    //                 <div class="card-body cd">
-                    //                     <div class="row">
-                    //                         <div class="col-md-2 text-right" style="font-weight: bold;">
-                    //                             <h6>Order ID: </h6>
-                    //                             <hr>
-                    //                             <h6>Name: </h6>
-                    //                             <hr>
-                    //                             <h6>Address: </h6>
-                    //                             <hr>
-                    //                             <h6>Zip Code: </h6>
-                    //                             <hr>
-                    //                             <h6>Ordered Date: </h6>
-                    //                             <hr>
-                    //                             <h6>Product: </h6>
-                    //                             <hr>
-                    //                             <h6>Quantity: </h6>
-                    //                         </div>
-                    //                         <div class="col-md-10"  style="font-style: italic;">
-                    //                             <h6>'.$row["0"].'</h6>
-                    //                             <hr>
-                    //                             <h6>'.$row["name"].'</h6>
-                    //                             <hr>
-                    //                             <h6>'.$row["address"].'</h6>
-                    //                             <hr>
-                    //                             <h6>'.$row["postal_code"].'</h6>
-                    //                             <hr>
-                    //                             <h6>'.$row["delivery_date"].'</h6>
-                    //                             <hr>
-                    //                             <h6>'.$row["title"].'</h6>
-                    //                             <hr>
-                    //                             <h6>'.$row["item_qty"].'</h6>
-                    //                             <hr>
-                    //                         </div>
-                    //                     </div>
-                    //                 </div>
-                    //             </div>
-                    //         ';
-                    //     }
-                    // }
-                ?>
-            </div>
+            <div id="data"></div>
         </div>
     </div>
 </div>
