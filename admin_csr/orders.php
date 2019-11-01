@@ -59,7 +59,9 @@ $_CON = $_CON->connect();
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="#">
-                                Hi, <span id="userLoggedIn" data-id="<?php echo $userLoggedIn?>"> Admin</span>
+                                Hi, <span id="userLoggedIn" data-id="<?php echo $userLoggedIn?>">
+                                    <?php echo ucfirst($_SESSION["usn"]);?>
+                                </span>
                                 <i class="fas fa-user-circle fa-lg"></i>
                             </a>
                         </li>
