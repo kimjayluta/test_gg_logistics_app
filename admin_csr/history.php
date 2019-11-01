@@ -34,9 +34,11 @@ $_CON = $_CON->connect();
             <li class="active">
                 <a href="#settings" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle ">Settings</a>
                 <ul class="collapse list-unstyled" id="settings">
-                    <li>
-                        <a href="history.php" class="active">History</a>
-                    </li>
+                    <?php
+                    if ($_SESSION["user_type"] == "admin"){
+                        echo '<li><a href="history.php" class="active">History</a></li>';
+                    }
+                    ?>
                     <li>
                         <a href="../includes/process.php?logout">Log out</a>
                     </li>

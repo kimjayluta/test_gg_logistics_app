@@ -10,12 +10,9 @@ if (isset($_SESSION["user_type"])){
         exit;
     }
 }
-
 $userLoggedIn = $_SESSION['userID'];
-
 $_CON = new Database();
 $_CON = $_CON->connect();
-
 
 ?>
 
@@ -49,7 +46,6 @@ $_CON = $_CON->connect();
     </nav>
     <!-- Page Content  -->
     <div id="content">
-
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <button type="button" id="sidebarCollapse" class="btn btn-dark" style="border-radius: 20px;">
@@ -82,9 +78,13 @@ $_CON = $_CON->connect();
                             <div style="float:right;">
                                 <select class="selectpicker" multiple data-live-search="true">
                                     <?php
-                                        $sql = "SELECT `id`,`name` FROM `clients` WHERE `user_id` = ?";
+                                        $sql = "";
+                                        if ($userType == "admin"){
+                                            $sql = "SELECT `id`,`name` FROM `clients` WHERE `user_id` = $userLoggedIn";
+                                        } else {
+                                            $sql = "SELECT `id`,`name` FROM `clients`";
+                                        }
                                         $pre_stmt = $_CON->prepare($sql);
-                                        $pre_stmt->bind_param("i",$userLoggedIn);
                                         $pre_stmt->execute() or die ($_CON->error());
                                         $result = $pre_stmt->get_result();
 

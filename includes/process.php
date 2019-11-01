@@ -127,4 +127,11 @@ if (isset($_POST["getOrderData"], $_POST["adminID"], $_POST["userType"])){
     echo $result;
     exit;
 }
+// Cancel order
+if (isset($_POST["cancelOrder"])){
+    $order = new Admin();
+    $result = $order->cancelOrder($_POST["orderID"], $_POST["userLoggedInID"], $_POST["adminID"], $_POST["itemID"], $_POST["itemQty"]);
+    echo $result;
+    exit;
+}
 ?>

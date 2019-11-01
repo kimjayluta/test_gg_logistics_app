@@ -132,6 +132,7 @@ class Admin {
         }
         return "NO_DATA_AVAILABLE";
     }
+
     // Fetch info data for and print in Edit modal
     public function getClientInfo($clientID){
         $sql = "SELECT `name`,`address`,`postal_code` FROM `clients` WHERE `id` = ? ";
@@ -145,6 +146,7 @@ class Admin {
             return json_encode($data);
         }
     }
+
     // Edit function
     public function editClientInfo($clientID, $name, $address, $zipCode){
         $sql = "UPDATE `clients` SET `name`= ?,`address`= ?,`postal_code`= ? WHERE `id` = ?";
@@ -158,6 +160,7 @@ class Admin {
         return "ERROR";
     }
 
+    // Delete the Order
     public function deleteOrder($orderID, $userLoggedInID, $adminID, $itemID, $itemQty) {
         $sql = "DELETE FROM `orders` WHERE `id` = ?";
         $pre_stmt = $this->_CON->prepare($sql);
@@ -165,10 +168,12 @@ class Admin {
         $result = $pre_stmt->execute() or die($this->_CON->error);
 
         if ($result){
+            // Update the Reserved stock
             $updateResult = $this->updateTheStock($itemID, $itemQty);
 
             if ($updateResult){
                 $action = "deleted";
+                // Logged the action in history
                 $result = $this->insertLogged($orderID, $userLoggedInID, $adminID, $action);
                 return ($result) ? 1 : 0;
             }
@@ -176,6 +181,26 @@ class Admin {
         return "ERROR";
     }
 
+    public function cancelOrder($orderID, $userLoggedInID, $adminID, $itemID, $itemQty){
+        $sql = "UPDATE `orders` SET `order_status`= '0' WHERE `id` = ?";
+        $pre_stmt = $this->_CON->prepare($sql);
+        $pre_stmt->bind_param("i", $orderID);
+        $result = $pre_stmt->execute() or die($this->_CON->error);
+
+        if ($result){
+            // Update the Reserved stock
+            $updateResult = $this->updateTheStock($itemID, $itemQty);
+
+            if ($updateResult){
+                $action = "canceled";
+                // Logged the action in history
+                $result = $this->insertLogged($orderID, $userLoggedInID, $adminID, $action);
+                return ($result) ? 1 : 0;
+            }
+        }
+    }
+
+    // Get all Order records with pagination
     public function getAllOrder($page, $loggedInID, $userType){
         $data = "";
         $record_per_page = 3;
@@ -202,11 +227,8 @@ class Admin {
             while($row = $result->fetch_array()){
                 $data .='<div class="card cd">
                         <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
-                        <div class="row" style="float:right">
-                        <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
-                        data-id="'.$row['client_id'].'">
-                        <i class="fas fa-edit fa-lg mr-1"></i>
-                        </a>';
+                        <div class="row" style="float:right"><a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
+                        data-id="'.$row['client_id'].'"><i class="fas fa-edit fa-lg mr-1"></i></a>';
 
                 if ($userType == "admin"){
                     $data.= '<a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
@@ -214,9 +236,9 @@ class Admin {
                             </a>';
                 }
 
-                $data.='
-                        </div>
-                        </div>
+                $data.='<a href="#" class="cancel-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
+                        <i class="fas fa-ban fa-lg mr-1"></i>
+                        </a></div></div>
                         <div class="card-body cd">
                             <input type="hidden" name="itemID" class="itemID" value="'.$row["item_id"].'" />
                             <input type="hidden" name="itemQty" class="itemQty" value="'.$row["item_qty"].'" />

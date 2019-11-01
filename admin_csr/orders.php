@@ -3,15 +3,12 @@ include "../includes/global/header.php";
 include "../database/constants.php";
 include "../database/db.php";
 
-$csrIsLoggedIn = false;
 
 // Restriction not to be visit by costumer user.
 if (isset($_SESSION["user_type"])){
     if ($_SESSION["user_type"] == 'costumer'){
         header("location: ../");
         exit;
-    } else if ($_SESSION["user_type"] == "csr"){
-        $csrIsLoggedIn = true;
     }
 }
 
@@ -86,7 +83,7 @@ $_CON = $_CON->connect();
                                 <select class="selectpicker" multiple data-live-search="true" id="selectedUsers" name="selectedUsers" required>
                                     <?php
                                         $sql = "";
-                                        if (!$csrIsLoggedIn){
+                                        if ($_SESSION["user_type"] == "admin"){
                                             $sql = "SELECT `id`,`name` FROM `clients` WHERE `user_id` = $userLoggedIn";
                                         } else {
                                             $sql = "SELECT `id`,`name` FROM `clients`";
@@ -276,6 +273,34 @@ $(document).ready(function (){
                 success: function (res){
                     if (res == 1){
                         alert("Data is successfully Deleted!");
+                        window.location.href = './orders.php';
+                    } else {
+                        alert("There's an Error deleting the data!");
+                    }
+                }
+            })
+        }
+    });
+    // Cancel Order function
+    $(document).on("click", ".cancel-btn", function (){
+        let isCancelTrue = confirm("Are you sure you want to Cancel this Order?");
+
+        if (isCancelTrue){
+            const data = {
+                    orderID: $(this).data("id"),
+                    userLoggedInID: $("#userLoggedIn").data("id"),
+                    adminID: $(this).data("adminid"),
+                    itemID: $(".itemID").val(),
+                    itemQty: $(".itemQty").val(),
+                    cancelOrder:1
+                }
+            $.ajax({
+                url: '../includes/process.php',
+                method: 'POST',
+                data: data,
+                success: function (res){
+                    if (res == 1){
+                        alert("Order is successfully Canceled!");
                         window.location.href = './orders.php';
                     } else {
                         alert("There's an Error deleting the data!");
