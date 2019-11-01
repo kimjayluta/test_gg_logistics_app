@@ -120,27 +120,5 @@ $_CON = $_CON->connect();
     </div>
 </div>
 
-<script>
-$(document).ready(function (){
-    $('.selectpicker').selectpicker();
-
-    $(".multi_select").on("click", function (){
-        const selectedUserIDs = $(".selectpicker").val();
-
-        $.ajax({
-            url: '../includes/process.php',
-            method: 'POST',
-            data: {selectedUserIDs:selectedUserIDs},
-            success: function (res){
-                if (res != "NO_DATA_AVAILABLE"){
-                    $("#table-data").html(res);
-                } else {
-                    $("#data").html("<h2 class='text-center text-danger mt-4'>NO DATA AVAILABLE</h2>");
-                }
-            }
-        })
-    });
-})
-</script>
-
+<script src="../js/Admin_csr.js"></script>
 <?php include "../includes/global/footer.php";?>

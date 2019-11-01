@@ -86,7 +86,7 @@ if (isset($_POST["selectedUserIDs"])){
 // Order Filter function
 if (isset($_POST["selectedUsers"], $_POST["dateFrom"], $_POST["dateTo"])){
     $order = new Admin();
-    $result = $order->getUserOrder($_POST["selectedUsers"], $_POST["dateFrom"], $_POST["dateTo"]);
+    $result = $order->getUserOrder($_POST["selectedUsers"], $_POST["dateFrom"], $_POST["dateTo"], $_POST["userType"]);
     echo $result;
     exit;
 }

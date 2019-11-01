@@ -64,7 +64,7 @@ class Admin {
     }
 
     // Filter and print function
-    public function getUserOrder($userIDs, $dateFrom, $dateTo) {
+    public function getUserOrder($userIDs, $dateFrom, $dateTo, $userType) {
         $newUserIDs = implode(",",$userIDs);
 
         $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
@@ -79,18 +79,25 @@ class Admin {
         $result = $pre_stmt->get_result();
         $data = "";
         if ($result->num_rows > 0){
-            while($row = $result->fetch_assoc()){
+            while($row = $result->fetch_array()){
+
                 $data .=
                 '<div class="card cd">
                         <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
                             <div class="row" style="float:right">
-                                <a href="#" class="edit-btn" data-toggle="modal" data-target="#exampleModal"
+                                <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
                                 data-id="'.$row['id'].'">
                                     <i class="fas fa-edit fa-lg mr-1"></i>
-                                </a>
-                                <a href="#" class="delete-btn" data-toggle="modal" data-target="#exampleModal" data-id="'.$row['client_id'].'">
-                                    <i class="fas fa-trash fa-lg mr-1"></i>
-                                </a>
+                                </a>';
+                if ($userType == "admin"){
+                    $data.= '<a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
+                                <i class="fas fa-trash fa-lg mr-1"></i>
+                            </a>';
+                }
+
+                $data .='   <a href="#" class="cancel-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
+                                <i class="fas fa-ban fa-lg mr-1"></i>
+                            </a>
                             </div>
                         </div>
                         <div class="card-body cd">
@@ -111,11 +118,13 @@ class Admin {
                                     <h6>Quantity: </h6>
                                 </div>
                                 <div class="col-md-10"  style="font-style: italic;">
-                                    <h6>0000'.$row["client_id"].'</h6>
+                                    <h6>0000'.$row["0"].'</h6>
                                     <hr>
                                     <h6>'.$row["name"].'</h6>
                                     <hr>
                                     <h6>'.$row["address"].'</h6>
+                                    <hr>
+                                    <h6>'.$row["postal_code"].'</h6>
                                     <hr>
                                     <h6>'.$row["delivery_date"].'</h6>
                                     <hr>
@@ -259,7 +268,7 @@ class Admin {
                                     <h6>Quantity: </h6>
                                 </div>
                                 <div class="col-md-10"  style="font-style: italic;">
-                                    <h6>'.$row["0"].'</h6>
+                                    <h6>0000'.$row["0"].'</h6>
                                     <hr>
                                     <h6>'.$row["name"].'</h6>
                                     <hr>
