@@ -176,35 +176,46 @@ class Admin {
         return "ERROR";
     }
 
-    public function getAllOrder($page, $loggedInID){
+    public function getAllOrder($page, $loggedInID, $userType){
         $data = "";
         $record_per_page = 3;
         $start_from_page = ($page - 1) * $record_per_page;
 
-        $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
-                WHERE b.id = a.item_id AND c.id = a.client_id
-                AND a.user_id = ? ORDER BY a.delivery_date DESC LIMIT ?, ?";
+        $sql = "";
+
+        if ($userType == "admin"){
+            $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
+                    WHERE b.id = a.item_id AND c.id = a.client_id
+                    AND a.user_id = $loggedInID ORDER BY a.delivery_date DESC LIMIT ?, ?";
+        } else {
+            $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
+                    WHERE b.id = a.item_id AND c.id = a.client_id
+                    ORDER BY a.delivery_date DESC LIMIT ?, ?";
+        }
 
         $pre_stmt = $this->_CON->prepare($sql);
-        $pre_stmt->bind_param("iii", $loggedInID, $start_from, $record_per_page);
+        $pre_stmt->bind_param("ii", $start_from_page, $record_per_page);
         $pre_stmt->execute() or die($this->_CON->error);
         $result = $pre_stmt->get_result();
 
         if ($result->num_rows > 0){
             while($row = $result->fetch_array()){
-                echo
-                '
-                    <div class="card cd">
+                $data .='<div class="card cd">
                         <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
-                            <div class="row" style="float:right">
-                                <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
-                                data-id="'.$row['client_id'].'">
-                                    <i class="fas fa-edit fa-lg mr-1"></i>
-                                </a>
-                                <a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
-                                    <i class="fas fa-trash fa-lg mr-1"></i>
-                                </a>
-                            </div>
+                        <div class="row" style="float:right">
+                        <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
+                        data-id="'.$row['client_id'].'">
+                        <i class="fas fa-edit fa-lg mr-1"></i>
+                        </a>';
+
+                if ($userType == "admin"){
+                    $data.= '<a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
+                            <i class="fas fa-trash fa-lg mr-1"></i>
+                            </a>';
+                }
+
+                $data.='
+                        </div>
                         </div>
                         <div class="card-body cd">
                             <input type="hidden" name="itemID" class="itemID" value="'.$row["item_id"].'" />
@@ -249,9 +260,14 @@ class Admin {
 
             // Display the Pagination
             $data .= "<div class='mt-4' style='float:right;'>";
-            $sql = "SELECT * FROM `orders` WHERE `client_id` = ?";
+            $sql = "";
+            if ($userType == "admin"){
+                $sql = "SELECT * FROM `orders` WHERE `client_id` = $loggedInID";
+            } else {
+                $sql = "SELECT * FROM `orders`";
+            }
+
             $pre_stmt = $this->_CON->prepare($sql);
-            $pre_stmt->bind_param("i", $loggedInID);
             $pre_stmt->execute() or die($this->_CON->error);
             $result = $pre_stmt->get_result();
             $totalRecords = $result->num_rows;

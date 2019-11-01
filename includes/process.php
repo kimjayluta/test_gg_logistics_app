@@ -113,7 +113,8 @@ if (isset($_POST["orderID"], $_POST["userLoggedInID"], $_POST["adminID"], $_POST
     exit;
 }
 
-if (isset($_POST["getOrderData"], $_POST["adminID"])){
+// Function uses to get all order with pagination
+if (isset($_POST["getOrderData"], $_POST["adminID"], $_POST["userType"])){
 
     if (isset($_POST["page"])){
         $page = $_POST["page"];
@@ -122,7 +123,7 @@ if (isset($_POST["getOrderData"], $_POST["adminID"])){
     }
 
     $costumer = new Admin();
-    $result = $costumer->getAllOrder($page, $_POST["adminID"]);
+    $result = $costumer->getAllOrder($page, $_POST["adminID"], $_POST["userType"]);
     echo $result;
     exit;
 }
