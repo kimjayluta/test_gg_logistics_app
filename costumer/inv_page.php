@@ -11,8 +11,7 @@ if (isset($_SESSION["user_type"])){
     }
 }
 
-$userLoggedIn = $_SESSION['userID'];
-
+$userLoggedIn = $_SESSION['costumerID'];
 $_CON = new Database();
 $_CON = $_CON->connect();
 
@@ -26,7 +25,7 @@ $_CON = $_CON->connect();
             <h4>Logistic_App</h4>
         </div>
         <ul class="list-unstyled components">
-            <li>
+            <li class="active">
                 <a href="inv_page.php">Inventory</a>
             </li>
             <li>

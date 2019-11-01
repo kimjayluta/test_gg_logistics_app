@@ -27,7 +27,7 @@ $_CON = $_CON->connect();
             <h4>Logistic_App</h4>
         </div>
         <ul class="list-unstyled components">
-            <li>
+            <li class="active">
                 <a href="inventory.php">Inventory</a>
             </li>
             <li>
@@ -38,7 +38,7 @@ $_CON = $_CON->connect();
                 <a href="#settings" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Settings</a>
                 <ul class="collapse list-unstyled" id="settings">
                     <li>
-                        <a href="#">History</a>
+                        <a href="history.php">History</a>
                     </li>
                     <li>
                         <a href="../includes/process.php?logout">Log out</a>

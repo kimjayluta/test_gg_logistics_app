@@ -29,7 +29,7 @@ $_CON = $_CON->connect();
             <li>
                 <a href="inv_page.php">Inventory</a>
             </li>
-            <li>
+            <li class="active">
                 <a href="order_list.php">Orders List</a>
             </li>
 

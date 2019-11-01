@@ -28,7 +28,7 @@ $_CON = $_CON->connect();
             <li>
                 <a href="inventory.php">Inventory</a>
             </li>
-            <li>
+            <li class="active">
                 <a href="orders.php">Orders List</a>
             </li>
 
@@ -36,7 +36,7 @@ $_CON = $_CON->connect();
                 <a href="#settings" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Settings</a>
                 <ul class="collapse list-unstyled" id="settings">
                     <li>
-                        <a href="#">History</a>
+                        <a href="history.php">History</a>
                     </li>
                     <li>
                         <a href="../includes/process.php?logout">Log out</a>
@@ -127,6 +127,7 @@ $_CON = $_CON->connect();
 
                     if ($result->num_rows > 0){
                         while($row = $result->fetch_array()){
+
                             echo
                             '
                                 <div class="card cd">
