@@ -96,17 +96,6 @@ $_CON = $_CON->connect();
                             echo
                             '
                                 <div class="card cd">
-                                    <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
-                                        <div class="row" style="float:right">
-                                            <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
-                                            data-id="'.$row['client_id'].'">
-                                                <i class="fas fa-edit fa-lg mr-1"></i>
-                                            </a>
-                                            <a href="#" class="delete-btn" data-id="'.$row['0'].'">
-                                                <i class="fas fa-trash fa-lg mr-1"></i>
-                                            </a>
-                                        </div>
-                                    </div>
                                     <div class="card-body cd">
                                         <div class="row">
                                             <div class="col-md-2 text-right" style="font-weight: bold;">
@@ -120,7 +109,7 @@ $_CON = $_CON->connect();
                                                 <hr>
                                                 <h6>Ordered Date: </h6>
                                                 <hr>
-                                                <h6>Order Items: </h6>
+                                                <h6>Product: </h6>
                                                 <hr>
                                                 <h6>Quantity: </h6>
                                             </div>
@@ -175,7 +164,7 @@ $_CON = $_CON->connect();
             <tbody class="table-body">
                 <tr>
                     <td class="item">
-                        <select class="form-control list-item" id="selected-item"></select>
+                        <select class="form-control list-item" id="selected-item" required></select>
                     </td>
                     <td style="width: 30%;">
                         <input type="number" name="qty" class="form-control" id="qty" required disabled/>
@@ -215,7 +204,7 @@ function getAvailableStock(itemID){
     $.ajax({
         url: '../includes/process.php',
         method: 'post',
-        data: {itemID},
+        data: {itemID:itemID, getStock:1},
         success: function (res){
             $("#available-stock").val(res);
         }
@@ -243,7 +232,12 @@ $(document).ready(function (){
                     userID: $("#loggedUser").attr("data-user")
                 }
 
-        if (data.qty > stock){
+        if (data.qty == ""){
+            alert("Please input a Quantity!");
+            return false;
+        }
+
+        if (data.qty > Number(stock)){
             alert("No available stock for that quantity!");
             return false;
         }

@@ -113,7 +113,6 @@ $_CON = $_CON->connect();
 
                 </div>
             </div>
-
             <div id="data">
                 <?php
                     $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
@@ -127,7 +126,6 @@ $_CON = $_CON->connect();
 
                     if ($result->num_rows > 0){
                         while($row = $result->fetch_array()){
-
                             echo
                             '
                                 <div class="card cd">
@@ -137,12 +135,14 @@ $_CON = $_CON->connect();
                                             data-id="'.$row['client_id'].'">
                                                 <i class="fas fa-edit fa-lg mr-1"></i>
                                             </a>
-                                            <a href="#" class="delete-btn" data-id="'.$row['0'].'">
+                                            <a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
                                                 <i class="fas fa-trash fa-lg mr-1"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body cd">
+                                        <input type="hidden" name="itemID" class="itemID" value="'.$row["item_id"].'" />
+                                        <input type="hidden" name="itemQty" class="itemQty" value="'.$row["item_qty"].'" />
                                         <div class="row">
                                             <div class="col-md-2 text-right" style="font-weight: bold;">
                                                 <h6>Order ID: </h6>
@@ -230,27 +230,6 @@ $_CON = $_CON->connect();
     </div>
 </div>
 
-<!-- Delete modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Order: </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 $(document).ready(function (){
     $('.selectpicker').selectpicker();
@@ -316,11 +295,18 @@ $(document).ready(function (){
     $(".delete-btn").on("click", function(){
         let isDeleteTrue = confirm("Are you sure you want to Delete this Order?");
         if (isDeleteTrue){
-            const dataID = $(this).data("id");
+            const data = {
+                    orderID: $(this).data("id"),
+                    userLoggedInID: $("#userLoggedIn").data("id"),
+                    adminID: $(this).data("adminid"),
+                    itemID: $(".itemID").val(),
+                    itemQty: $(".itemQty").val()
+                }
+
             $.ajax({
                 url: '../includes/process.php',
                 method: 'POST',
-                data: {dataID:dataID, deleteData:1},
+                data: data,
                 success: function (res){
                     if (res == 1){
                         alert("Data is successfully Deleted!");

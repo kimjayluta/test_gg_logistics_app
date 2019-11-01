@@ -11,19 +11,6 @@ class Admin {
             return $this->_CON;
         }
     }
-/*
-* /$$$$$$                                           /$$
-*|_  $$_/                                          | $$
-*  | $$   /$$$$$$$  /$$    /$$ /$$$$$$  /$$$$$$$  /$$$$$$    /$$$$$$   /$$$$$$  /$$   /$$
-*  | $$  | $$__  $$|  $$  /$$//$$__  $$| $$__  $$|_  $$_/   /$$__  $$ /$$__  $$| $$  | $$
-*  | $$  | $$  \ $$ \  $$/$$/| $$$$$$$$| $$  \ $$  | $$    | $$  \ $$| $$  \__/| $$  | $$
-*  | $$  | $$  | $$  \  $$$/ | $$_____/| $$  | $$  | $$ /$$| $$  | $$| $$      | $$  | $$
-* /$$$$$$| $$  | $$   \  $/  |  $$$$$$$| $$  | $$  |  $$$$/|  $$$$$$/| $$      |  $$$$$$$
-*|______/|__/  |__/    \_/    \_______/|__/  |__/   \___/   \______/ |__/       \____  $$
-*                                                                               /$$  | $$
-*                                                                              |  $$$$$$/
-*                                                                               \______/
-*/
 
     // This function uses to Get the User item when filtering
     public function getUserItem($userIDs = array()){
@@ -57,16 +44,25 @@ class Admin {
         return "NO_DATA_AVAILABLE";
     }
 
-/************************************************************
-  /$$$$$$                  /$$
- /$$__  $$                | $$
-| $$  \ $$  /$$$$$$   /$$$$$$$  /$$$$$$   /$$$$$$   /$$$$$$$
-| $$  | $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/
-| $$  | $$| $$  \__/| $$  | $$| $$$$$$$$| $$  \__/|  $$$$$$
-| $$  | $$| $$      | $$  | $$| $$_____/| $$       \____  $$
-|  $$$$$$/| $$      |  $$$$$$$|  $$$$$$$| $$       /$$$$$$$/
- \______/ |__/       \_______/ \_______/|__/      |_______/
-*************************************************************/
+    public function insertLogged($orderID, $userLoggedInID, $adminID, $action){
+        $sql = "INSERT INTO `history`(`user_id`, `admin_id`, `order_id`, `user_action`, `date_action`)
+                    VALUES (?,?,?,?,NOW())";
+        $pre_stmt = $this->_CON->prepare($sql);
+        $pre_stmt->bind_param("iiis", $userLoggedInID, $adminID, $orderID, $action);
+        $result = $pre_stmt->execute() or die($this->_CON->error);
+        return ($result) ? 1 : 0;
+    }
+
+    public function updateTheStock($itemID, $itemQty){
+        $sql = "UPDATE `items` SET `reserved_stock` = `reserved_stock` - ? WHERE `id` = ?";
+
+        $pre_stmt = $this->_CON->prepare($sql);
+        $pre_stmt->bind_param("ii", $itemQty, $itemID);
+        $result = $pre_stmt->execute() or die($this->_CON->error);
+        return ($result) ? 1 : 0;
+
+    }
+
     // Filter and print function
     public function getUserOrder($userIDs, $dateFrom, $dateTo) {
         $newUserIDs = implode(",",$userIDs);
@@ -165,14 +161,20 @@ class Admin {
         return "ERROR";
     }
 
-    public function deleteOrder($dataID){
+    public function deleteOrder($orderID, $userLoggedInID, $adminID, $itemID, $itemQty) {
         $sql = "DELETE FROM `orders` WHERE `id` = ?";
         $pre_stmt = $this->_CON->prepare($sql);
-        $pre_stmt->bind_param("i", $dataID);
+        $pre_stmt->bind_param("i", $orderID);
         $result = $pre_stmt->execute() or die($this->_CON->error);
 
         if ($result){
-            return 1;
+            $updateResult = $this->updateTheStock($itemID, $itemQty);
+
+            if ($updateResult){
+                $action = "deleted";
+                $result = $this->insertLogged($orderID, $userLoggedInID, $adminID, $action);
+                return ($result) ? 1 : 0;
+            }
         }
         return "ERROR";
     }
