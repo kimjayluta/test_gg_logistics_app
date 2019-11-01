@@ -11,7 +11,7 @@ if (isset($_SESSION["user_type"])){
     }
 }
 
-$userLoggedIn = $_SESSION['userId'];
+$userLoggedIn = $_SESSION['userID'];
 
 $_CON = new Database();
 $_CON = $_CON->connect();
@@ -83,15 +83,40 @@ $_CON = $_CON->connect();
                         <thead>
                         <tr class="">
                             <th scope="col">Item Code</th>
+                            <th scope="col">Product</th>
                             <th scope="col">Description</th>
                             <th scope="col">Available Stock</th>
                             <th scope="col">Reserved Stock</th>
                             <th scope="col">Overall Stock</th>
-                            <th scope="col">Order By</th>
                         </tr>
                         </thead>
                         <tbody>
+                            <?php
+                                $sql = "SELECT a.id, b.*, c.name FROM orders a, items b, clients c
+                                WHERE b.id = a.item_id AND c.id = a.client_id
+                                AND a.client_id = ? ORDER BY a.delivery_date DESC";
 
+                                $pre_stmt = $_CON->prepare($sql);
+                                $pre_stmt->bind_param("i", $userLoggedIn);
+                                $pre_stmt->execute() or die($_CON->error);
+                                $result = $pre_stmt->get_result();
+
+                                if ($result->num_rows > 0){
+                                    while($row = $result->fetch_array()){
+                                        $availableStock = $row["qty_stock"] - $row["reserved_stock"];
+                                        echo '
+                                                <tr>
+                                                    <td>'.$row['0'].'</td>
+                                                    <td>'.$row["title"].'</td>
+                                                    <td>'.$row["description"].'</td>
+                                                    <td>'.$availableStock.'</td>
+                                                    <td>'.$row["reserved_stock"].'</td>
+                                                    <td>'.$row["qty_stock"].'</td>
+                                                </tr>
+                                            ';
+                                    }
+                                }
+                            ?>
                         </tbody>
                     </table>
                 </div>
