@@ -81,8 +81,7 @@ class Admin {
         if ($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
                 $data .=
-                '
-                    <div class="card cd">
+                '<div class="card cd">
                         <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
                             <div class="row" style="float:right">
                                 <a href="#" class="edit-btn" data-toggle="modal" data-target="#exampleModal"
@@ -127,11 +126,9 @@ class Admin {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                ';
+                    </div>';
             }
             return $data;
-
         }
         return "NO_DATA_AVAILABLE";
     }
@@ -177,6 +174,101 @@ class Admin {
             }
         }
         return "ERROR";
+    }
+
+    public function getAllOrder($page, $loggedInID){
+        $data = "";
+        $record_per_page = 3;
+        $start_from_page = ($page - 1) * $record_per_page;
+
+        $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
+                WHERE b.id = a.item_id AND c.id = a.client_id
+                AND a.user_id = ? ORDER BY a.delivery_date DESC LIMIT ?, ?";
+
+        $pre_stmt = $this->_CON->prepare($sql);
+        $pre_stmt->bind_param("iii", $loggedInID, $start_from, $record_per_page);
+        $pre_stmt->execute() or die($this->_CON->error);
+        $result = $pre_stmt->get_result();
+
+        if ($result->num_rows > 0){
+            while($row = $result->fetch_array()){
+                echo
+                '
+                    <div class="card cd">
+                        <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
+                            <div class="row" style="float:right">
+                                <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
+                                data-id="'.$row['client_id'].'">
+                                    <i class="fas fa-edit fa-lg mr-1"></i>
+                                </a>
+                                <a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
+                                    <i class="fas fa-trash fa-lg mr-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body cd">
+                            <input type="hidden" name="itemID" class="itemID" value="'.$row["item_id"].'" />
+                            <input type="hidden" name="itemQty" class="itemQty" value="'.$row["item_qty"].'" />
+                            <div class="row">
+                                <div class="col-md-2 text-right" style="font-weight: bold;">
+                                    <h6>Order ID: </h6>
+                                    <hr>
+                                    <h6>Name: </h6>
+                                    <hr>
+                                    <h6>Address: </h6>
+                                    <hr>
+                                    <h6>Zip Code: </h6>
+                                    <hr>
+                                    <h6>Ordered Date: </h6>
+                                    <hr>
+                                    <h6>Order Items: </h6>
+                                    <hr>
+                                    <h6>Quantity: </h6>
+                                </div>
+                                <div class="col-md-10"  style="font-style: italic;">
+                                    <h6>'.$row["0"].'</h6>
+                                    <hr>
+                                    <h6>'.$row["name"].'</h6>
+                                    <hr>
+                                    <h6>'.$row["address"].'</h6>
+                                    <hr>
+                                    <h6>'.$row["postal_code"].'</h6>
+                                    <hr>
+                                    <h6>'.$row["delivery_date"].'</h6>
+                                    <hr>
+                                    <h6>'.$row["title"].'</h6>
+                                    <hr>
+                                    <h6>'.$row["item_qty"].'</h6>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ';
+            }
+
+            // Display the Pagination
+            $data .= "<div class='mt-4' style='float:right;'>";
+            $sql = "SELECT * FROM `orders` WHERE `client_id` = ?";
+            $pre_stmt = $this->_CON->prepare($sql);
+            $pre_stmt->bind_param("i", $loggedInID);
+            $pre_stmt->execute() or die($this->_CON->error);
+            $result = $pre_stmt->get_result();
+            $totalRecords = $result->num_rows;
+            $totalPage = ceil($totalRecords/$record_per_page);
+
+            $data .= '<nav aria-label="Page navigation example"><ul class="pagination">';
+            for ($i = 1; $i <= $totalPage; $i++){
+                if ($i == 1){
+                    $data .= '<li class="page-item active"><span class="page-link pagination_link" id="'.$i.'">'.$i.'</span></li>';
+                } else {
+                    $data .= '<li class="page-item"><span class="page-link pagination_link" id="'.$i.'">'.$i.'</span></li>';
+                }
+            }
+            $data .='</ul></nav></div>';
+            echo $data;
+        }
+
     }
 }
 ?>

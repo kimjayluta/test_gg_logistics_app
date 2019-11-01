@@ -52,6 +52,20 @@ if (isset($_POST["item"], $_POST["qty"], $_POST["costumerID"], $_POST["userID"])
     echo $result;
     exit;
 }
+// Get all order with pagination
+if (isset($_POST["getData"], $_POST["clientID"])){
+
+    if (isset($_POST["page"])){
+        $page = $_POST["page"];
+    } else {
+        $page = 1;
+    }
+
+    $costumer = new Costumer();
+    $result = $costumer->getAllData($page, $_POST["clientID"]);
+    echo $result;
+    exit;
+}
 
 /**********************************************************************
 *               _           _             __   _____  _____ _____
@@ -95,6 +109,20 @@ if (isset($_POST["orderID"], $_POST["userLoggedInID"], $_POST["adminID"], $_POST
 
     $order = new Admin();
     $result = $order->deleteOrder($_POST["orderID"], $_POST["userLoggedInID"], $_POST["adminID"], $_POST["itemID"], $_POST["itemQty"]);
+    echo $result;
+    exit;
+}
+
+if (isset($_POST["getOrderData"], $_POST["adminID"])){
+
+    if (isset($_POST["page"])){
+        $page = $_POST["page"];
+    } else {
+        $page = 1;
+    }
+
+    $costumer = new Admin();
+    $result = $costumer->getAllOrder($page, $_POST["adminID"]);
     echo $result;
     exit;
 }

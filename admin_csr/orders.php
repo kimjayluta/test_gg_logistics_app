@@ -115,72 +115,72 @@ $_CON = $_CON->connect();
             </div>
             <div id="data">
                 <?php
-                    $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
-                    WHERE b.id = a.item_id AND c.id = a.client_id
-                    AND a.user_id = ? ORDER BY a.delivery_date DESC";
+                    // $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
+                    // WHERE b.id = a.item_id AND c.id = a.client_id
+                    // AND a.user_id = ? ORDER BY a.delivery_date DESC";
 
-                    $pre_stmt = $_CON->prepare($sql);
-                    $pre_stmt->bind_param("i", $userLoggedIn);
-                    $pre_stmt->execute() or die($_CON->error);
-                    $result = $pre_stmt->get_result();
+                    // $pre_stmt = $_CON->prepare($sql);
+                    // $pre_stmt->bind_param("i", $userLoggedIn);
+                    // $pre_stmt->execute() or die($_CON->error);
+                    // $result = $pre_stmt->get_result();
 
-                    if ($result->num_rows > 0){
-                        while($row = $result->fetch_array()){
-                            echo
-                            '
-                                <div class="card cd">
-                                    <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
-                                        <div class="row" style="float:right">
-                                            <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
-                                            data-id="'.$row['client_id'].'">
-                                                <i class="fas fa-edit fa-lg mr-1"></i>
-                                            </a>
-                                            <a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
-                                                <i class="fas fa-trash fa-lg mr-1"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="card-body cd">
-                                        <input type="hidden" name="itemID" class="itemID" value="'.$row["item_id"].'" />
-                                        <input type="hidden" name="itemQty" class="itemQty" value="'.$row["item_qty"].'" />
-                                        <div class="row">
-                                            <div class="col-md-2 text-right" style="font-weight: bold;">
-                                                <h6>Order ID: </h6>
-                                                <hr>
-                                                <h6>Name: </h6>
-                                                <hr>
-                                                <h6>Address: </h6>
-                                                <hr>
-                                                <h6>Zip Code: </h6>
-                                                <hr>
-                                                <h6>Ordered Date: </h6>
-                                                <hr>
-                                                <h6>Order Items: </h6>
-                                                <hr>
-                                                <h6>Quantity: </h6>
-                                            </div>
-                                            <div class="col-md-10"  style="font-style: italic;">
-                                                <h6>'.$row["0"].'</h6>
-                                                <hr>
-                                                <h6>'.$row["name"].'</h6>
-                                                <hr>
-                                                <h6>'.$row["address"].'</h6>
-                                                <hr>
-                                                <h6>'.$row["postal_code"].'</h6>
-                                                <hr>
-                                                <h6>'.$row["delivery_date"].'</h6>
-                                                <hr>
-                                                <h6>'.$row["title"].'</h6>
-                                                <hr>
-                                                <h6>'.$row["item_qty"].'</h6>
-                                                <hr>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ';
-                        }
-                    }
+                    // if ($result->num_rows > 0){
+                    //     while($row = $result->fetch_array()){
+                    //         echo
+                    //         '
+                    //             <div class="card cd">
+                    //                 <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
+                    //                     <div class="row" style="float:right">
+                    //                         <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
+                    //                         data-id="'.$row['client_id'].'">
+                    //                             <i class="fas fa-edit fa-lg mr-1"></i>
+                    //                         </a>
+                    //                         <a href="#" class="delete-btn" data-id="'.$row['0'].'" data-adminid="'.$row["user_id"].'">
+                    //                             <i class="fas fa-trash fa-lg mr-1"></i>
+                    //                         </a>
+                    //                     </div>
+                    //                 </div>
+                    //                 <div class="card-body cd">
+                    //                     <input type="hidden" name="itemID" class="itemID" value="'.$row["item_id"].'" />
+                    //                     <input type="hidden" name="itemQty" class="itemQty" value="'.$row["item_qty"].'" />
+                    //                     <div class="row">
+                    //                         <div class="col-md-2 text-right" style="font-weight: bold;">
+                    //                             <h6>Order ID: </h6>
+                    //                             <hr>
+                    //                             <h6>Name: </h6>
+                    //                             <hr>
+                    //                             <h6>Address: </h6>
+                    //                             <hr>
+                    //                             <h6>Zip Code: </h6>
+                    //                             <hr>
+                    //                             <h6>Ordered Date: </h6>
+                    //                             <hr>
+                    //                             <h6>Order Items: </h6>
+                    //                             <hr>
+                    //                             <h6>Quantity: </h6>
+                    //                         </div>
+                    //                         <div class="col-md-10"  style="font-style: italic;">
+                    //                             <h6>'.$row["0"].'</h6>
+                    //                             <hr>
+                    //                             <h6>'.$row["name"].'</h6>
+                    //                             <hr>
+                    //                             <h6>'.$row["address"].'</h6>
+                    //                             <hr>
+                    //                             <h6>'.$row["postal_code"].'</h6>
+                    //                             <hr>
+                    //                             <h6>'.$row["delivery_date"].'</h6>
+                    //                             <hr>
+                    //                             <h6>'.$row["title"].'</h6>
+                    //                             <hr>
+                    //                             <h6>'.$row["item_qty"].'</h6>
+                    //                             <hr>
+                    //                         </div>
+                    //                     </div>
+                    //                 </div>
+                    //             </div>
+                    //         ';
+                    //     }
+                    // }
                 ?>
             </div>
         </div>
@@ -231,8 +231,33 @@ $_CON = $_CON->connect();
 </div>
 
 <script>
+
+function load_data(page){
+    const adminID = $("#userLoggedIn").data("id");
+
+    $.ajax({
+        url: '../includes/process.php',
+        method: 'post',
+        data: {page:page, getOrderData:1, adminID:adminID},
+        success: function (res){
+            $("#data").html(res);
+
+            $("li.active").removeClass("active");
+            $("#"+page).parent("li").addClass("active");
+        }
+    })
+}
+
 $(document).ready(function (){
     $('.selectpicker').selectpicker();
+
+    load_data();
+
+    $(document).on("click", ".pagination_link", function(){
+        let page = $(this).attr("id");
+        $(document).scrollTop(0);
+        load_data(page);
+    });
 
     // Filter function
     $("#filter-form").on("submit", function(e){
@@ -257,7 +282,7 @@ $(document).ready(function (){
     });
 
     // On click the edit icon, fetch the data and print in modal
-    $("#data").find(".edit-btn").on("click", function (){
+    $(document).on("click", ".edit-btn", function (){
         const clientID = $(this).data("id");
         $.ajax({
             url: '../includes/process.php',
@@ -292,7 +317,7 @@ $(document).ready(function (){
     });
 
     // Delete Function
-    $(".delete-btn").on("click", function(){
+    $(document).on("click", ".delete-btn", function(){
         let isDeleteTrue = confirm("Are you sure you want to Delete this Order?");
         if (isDeleteTrue){
             const data = {
