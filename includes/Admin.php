@@ -37,11 +37,11 @@ class Admin {
         $pre_stmt->execute() or die($this->_CON->error);
         $result = $pre_stmt->get_result();
         $rows = array();
-
+        $table = "";
         if ($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
                 $availableStock = $row["qty_stock"] - $row["reserved_stock"];
-                $table = '
+                $table .= '
                             <tr>
                                 <td>'.$row["item_id"].'</td>
                                 <td>'.$row["title"].'</td>
@@ -77,7 +77,7 @@ class Admin {
                 AND c.id = a.client_id
                 AND a.client_id IN ($newUserIDs)
                 ORDER BY a.delivery_date DESC";
-    
+
         $pre_stmt = $this->_CON->prepare($sql);
         $pre_stmt->execute() or die($this->_CON->error);
         $result = $pre_stmt->get_result();
