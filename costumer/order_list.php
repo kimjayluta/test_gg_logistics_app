@@ -13,9 +13,9 @@ if (isset($_SESSION["user_type"])){
 $costumerID = $_SESSION['costumerID'];
 $userID = $_SESSION["userID"];
 
-// include "../database/db.php";
-// $_CON = new Database();
-// $_CON = $_CON->connect();
+include "../database/db.php";
+$_CON = new Database();
+$_CON = $_CON->connect();
 
 ?>
 <title>Dashboard</title>
@@ -79,43 +79,79 @@ $userID = $_SESSION["userID"];
                     </div>
                 </div>
             </div>
-            <div class="card cd">
-                <div class="card-body cd">
-                    <div class="row">
-                        <div class="col-md-2 text-right" style="font-weight: bold;">
-                            <h6>Order ID: </h6>
-                            <hr>
-                            <h6>Name: </h6>
-                            <hr>
-                            <h6>Address: </h6>
-                            <hr>
-                            <h6>To Received: </h6>
-                            <hr>
-                            <h6>Order Items: </h6>
-                        </div>
-                        <div class="col-md-10"  style="font-style: italic;">
-                            <h6>#00001</h6>
-                            <hr>
-                            <h6>Kim</h6>
-                            <hr>
-                            <h6>Naga City</h6>
-                            <hr>
-                            <h6>07/21/1998</h6>
-                            <hr>
-                            <ul class="order-list">
-                                <li class="">Samsung</li>
-                                <li class="">Samsung</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div id="data">
+                <?php
+                    $sql = "SELECT a.*,b.*,c.* FROM orders a, items b, clients c
+                    WHERE b.id = a.item_id AND c.id = a.client_id
+                    AND a.client_id = ? ORDER BY a.delivery_date DESC";
+
+                    $pre_stmt = $_CON->prepare($sql);
+                    $pre_stmt->bind_param("i", $costumerID);
+                    $pre_stmt->execute() or die($_CON->error);
+                    $result = $pre_stmt->get_result();
+
+                    if ($result->num_rows > 0){
+                        while($row = $result->fetch_array()){
+                            echo
+                            '
+                                <div class="card cd">
+                                    <div class="card-header pb-0 pt-3 mt-2" style="background-color: transparent;border: 0;">
+                                        <div class="row" style="float:right">
+                                            <a href="#" class="edit-btn" data-toggle="modal" data-target="#editModal"
+                                            data-id="'.$row['client_id'].'">
+                                                <i class="fas fa-edit fa-lg mr-1"></i>
+                                            </a>
+                                            <a href="#" class="delete-btn" data-id="'.$row['0'].'">
+                                                <i class="fas fa-trash fa-lg mr-1"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body cd">
+                                        <div class="row">
+                                            <div class="col-md-2 text-right" style="font-weight: bold;">
+                                                <h6>Order ID: </h6>
+                                                <hr>
+                                                <h6>Name: </h6>
+                                                <hr>
+                                                <h6>Address: </h6>
+                                                <hr>
+                                                <h6>Zip Code: </h6>
+                                                <hr>
+                                                <h6>Ordered Date: </h6>
+                                                <hr>
+                                                <h6>Order Items: </h6>
+                                                <hr>
+                                                <h6>Quantity: </h6>
+                                            </div>
+                                            <div class="col-md-10"  style="font-style: italic;">
+                                                <h6>'.$row["0"].'</h6>
+                                                <hr>
+                                                <h6>'.$row["name"].'</h6>
+                                                <hr>
+                                                <h6>'.$row["address"].'</h6>
+                                                <hr>
+                                                <h6>'.$row["postal_code"].'</h6>
+                                                <hr>
+                                                <h6>'.$row["delivery_date"].'</h6>
+                                                <hr>
+                                                <h6>'.$row["title"].'</h6>
+                                                <hr>
+                                                <h6>'.$row["item_qty"].'</h6>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ';
+                        }
+                    }
+                ?>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Large modal -->
-
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">

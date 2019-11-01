@@ -109,7 +109,7 @@ class Admin {
                                     <hr>
                                     <h6>Zip Code: </h6>
                                     <hr>
-d                                    <h6>Ordered Date: </h6>
+                                    <h6>Ordered Date: </h6>
                                     <hr>
                                     <h6>Order Items: </h6>
                                     <hr>
